@@ -21,7 +21,7 @@ Installing
 Add the dependency to your project:
 
 ```bash
-composer require hugobon/cron-expression-php5.2
+composer require hugobon/cron-expression
 ```
 
 Usage
