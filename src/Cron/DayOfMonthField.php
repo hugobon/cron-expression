@@ -24,9 +24,6 @@ use DateTime;
  */
 class DayOfMonthField extends AbstractField
 {
-    protected $rangeStart = 1;
-    protected $rangeEnd = 31;
-
     /**
      * Get the nearest day of the week for a given day in a month
      *
@@ -102,30 +99,75 @@ class DayOfMonthField extends AbstractField
     }
 
     /**
-     * @inheritDoc
+     * Validates that the value is valid for the Day of the Month field
+     * Days of the month can contain values of 1-31, *, L, or ? by default. This can be augmented with lists via a ',',
+     * ranges via a '-', or with a '[0-9]W' to specify the closest weekday.
+     *
+     * @param string $value
+     * @return bool
      */
     public function validate($value)
     {
-        $basicChecks = parent::validate($value);
-
-        // Validate that a list don't have W or L
-        if (strpos($value, ',') !== false && (strpos($value, 'W') !== false || strpos($value, 'L') !== false)) {
-            return false;
+        // Allow wildcards and a single L
+        if ($value === '?' || $value === '*' || $value === 'L') {
+            return true;
         }
 
-        if (!$basicChecks) {
-
-            if ($value === 'L') {
-                return true;
-            }
-
-            if (preg_match('/^(.*)W$/', $value, $matches)) {
-                return $this->validate($matches[1]);
-            }
-
-            return false;
+        // If you only contain numbers and are within 1-31
+        if ((bool) preg_match('/^\d{1,2}$/', $value) && ($value >= 1 && $value <= 31)) {
+            return true;
         }
 
-        return $basicChecks;
+        // If you have a -, we will deal with each of your chunks
+        if ((bool) preg_match('/-/', $value)) {
+            // We cannot have a range within a list or vice versa
+            if ((bool) preg_match('/,/', $value)) {
+                return false;
+            }
+
+            $chunks = explode('-', $value);
+            foreach ($chunks as $chunk) {
+                if (!$this->validate($chunk)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // If you have a comma, we will deal with each value
+        if ((bool) preg_match('/,/', $value)) {
+            // We cannot have a range within a list or vice versa
+            if ((bool) preg_match('/-/', $value)) {
+                return false;
+            }
+
+            $chunks = explode(',', $value);
+            foreach ($chunks as $chunk) {
+                if (!$this->validate($chunk)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // If you contain a /, we'll deal with it
+        if ((bool) preg_match('/\//', $value)) {
+            $chunks = explode('/', $value);
+            foreach ($chunks as $chunk) {
+                if (!$this->validate($chunk)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // If you end in W, make sure that it has a numeric in front of it
+        if ((bool) preg_match('/^\d{1,2}W$/', $value)) {
+            return true;
+        }
+
+        return false;
     }
 }

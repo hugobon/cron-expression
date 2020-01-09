@@ -1,17 +1,5 @@
 # Change Log
 
-## [2.0.0] - 2017-10-12
-### Added
-- N/A
-
-### Changed
-- Dropped support for PHP 5.x
-- Dropped support for the YEAR field, as it was not part of the cron standard
-
-### Fixed
-- Reworked validation for all the field types
-- Stepping should now work for 1-indexed fields like Month (#153)
-
 ## [1.2.0] - 2017-01-22
 ### Added
 - Added IDE, CodeSniffer, and StyleCI.IO support

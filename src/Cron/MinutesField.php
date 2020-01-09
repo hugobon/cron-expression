@@ -10,9 +10,6 @@ use DateTime;
  */
 class MinutesField extends AbstractField
 {
-    protected $rangeStart = 0;
-    protected $rangeEnd = 59;
-
     public function isSatisfiedBy(DateTime $date, $value)
     {
         return $this->isSatisfied($date->format('i'), $value);
@@ -56,5 +53,10 @@ class MinutesField extends AbstractField
         }
 
         return $this;
+    }
+
+    public function validate($value)
+    {
+        return (bool) preg_match('/^[\*,\/\-0-9]+$/', $value);
     }
 }
