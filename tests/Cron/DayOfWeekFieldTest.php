@@ -4,28 +4,28 @@ namespace Cron\Tests;
 
 use Cron\DayOfWeekField;
 use DateTime;
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @author Michael Dowling <mtdowling@gmail.com>
  */
-class DayOfWeekFieldTest extends TestCase
+class DayOfWeekFieldTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Cron\DayOfWeekField::validate
+     * @covers Cron\DayOfWeekField::validate
      */
     public function testValidatesField()
     {
         $f = new DayOfWeekField();
         $this->assertTrue($f->validate('1'));
         $this->assertTrue($f->validate('*'));
-        $this->assertFalse($f->validate('*/3,1,1-12'));
+        $this->assertTrue($f->validate('*/3,1,1-12'));
         $this->assertTrue($f->validate('SUN-2'));
         $this->assertFalse($f->validate('1.'));
     }
 
     /**
-     * @covers \Cron\DayOfWeekField::isSatisfiedBy
+     * @covers Cron\DayOfWeekField::isSatisfiedBy
      */
     public function testChecksIfSatisfied()
     {
@@ -34,22 +34,22 @@ class DayOfWeekFieldTest extends TestCase
     }
 
     /**
-     * @covers \Cron\DayOfWeekField::increment
+     * @covers Cron\DayOfWeekField::increment
      */
     public function testIncrementsDate()
     {
         $d = new DateTime('2011-03-15 11:15:00');
         $f = new DayOfWeekField();
         $f->increment($d);
-        $this->assertSame('2011-03-16 00:00:00', $d->format('Y-m-d H:i:s'));
+        $this->assertEquals('2011-03-16 00:00:00', $d->format('Y-m-d H:i:s'));
 
         $d = new DateTime('2011-03-15 11:15:00');
         $f->increment($d, true);
-        $this->assertSame('2011-03-14 23:59:00', $d->format('Y-m-d H:i:s'));
+        $this->assertEquals('2011-03-14 23:59:00', $d->format('Y-m-d H:i:s'));
     }
 
     /**
-     * @covers \Cron\DayOfWeekField::isSatisfiedBy
+     * @covers Cron\DayOfWeekField::isSatisfiedBy
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Weekday must be a value between 0 and 7. 12 given
      */
@@ -60,9 +60,9 @@ class DayOfWeekFieldTest extends TestCase
     }
 
     /**
-     * @covers \Cron\DayOfWeekField::isSatisfiedBy
+     * @covers Cron\DayOfWeekField::isSatisfiedBy
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage There are never more than 5 or less than 1 of a given weekday in a month
+     * @expectedExceptionMessage There are never more than 5 of a given weekday in a month
      */
     public function testValidatesHashValueNth()
     {
@@ -71,7 +71,7 @@ class DayOfWeekFieldTest extends TestCase
     }
 
     /**
-     * @covers \Cron\DayOfWeekField::validate
+     * @covers Cron\DayOfWeekField::validate
      */
     public function testValidateWeekendHash()
     {
@@ -87,7 +87,7 @@ class DayOfWeekFieldTest extends TestCase
     }
 
     /**
-     * @covers \Cron\DayOfWeekField::isSatisfiedBy
+     * @covers Cron\DayOfWeekField::isSatisfiedBy
      */
     public function testHandlesZeroAndSevenDayOfTheWeekValues()
     {
