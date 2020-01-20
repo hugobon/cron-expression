@@ -17,13 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Cron\\": "src/Cron/"
+            "Hugobon\\Cron\\": "src/Cron/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/Cron/"
+            "Hugobon\\Tests\\": "tests/Cron/"
         }
-    },
-    "abandoned": "dragonmantank/cron-expression"
+    }
 }
