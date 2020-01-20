@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Hugobon\\Cron\\": "src/Cron/"
+            "Cron\\": "src/Cron/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Hugobon\\Tests\\": "tests/Cron/"
+            "Tests\\": "tests/Cron/"
         }
     }
 }
